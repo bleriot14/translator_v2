@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Translator</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded shadow">
+        <h1 class="text-3xl font-bold mb-6 text-center">Universal Translator</h1>
+        <div class="mb-4">
+            <label for="sourceText" class="block mb-2">Source Text:</label>
+            <textarea id="sourceText" class="w-full p-2 border rounded" rows="4"></textarea>
+        </div>
+        <div class="flex mb-4">
+            <div class="w-1/2 mr-2">
+                <label for="sourceLang" class="block mb-2">Source Language:</label>
+                <input type="text" id="sourceLang" class="w-full p-2 border rounded" value="eng" placeholder="e.g., eng">
+            </div>
+            <div class="w-1/2 ml-2">
+                <label for="targetLang" class="block mb-2">Target Language:</label>
+                <input type="text" id="targetLang" class="w-full p-2 border rounded" value="tur" placeholder="e.g., tur">
+            </div>
+        </div>
+        <button id="translateBtn" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Translate</button>
+        <div class="mt-6">
+            <label for="translatedText" class="block mb-2">Translated Text:</label>
+            <textarea id="translatedText" class="w-full p-2 border rounded" rows="4" readonly></textarea>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('translateBtn').addEventListener('click', async () => {
+            const sourceText = document.getElementById('sourceText').value;
+            const sourceLang = document.getElementById('sourceLang').value;
+            const targetLang = document.getElementById('targetLang').value;
+
+            try {
+                const response = await axios.post('/translate', {
+                    text: sourceText,
+                    source_lang: sourceLang,
+                    target_lang: targetLang
+                });
+                document.getElementById('translatedText').value = response.data.translated_text;
+            } catch (error) {
+                console.error('Translation error:', error);
+                alert('An error occurred during translation. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
